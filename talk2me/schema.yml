@@ -1,0 +1,7 @@
+openapi: 3.0.3
+info:
+  title: Talk2Me API
+  version: 1.0.0
+  description: API for a chatroom application
+paths: {}
+components: {}
