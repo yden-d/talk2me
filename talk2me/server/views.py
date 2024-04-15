@@ -10,12 +10,30 @@ from rest_framework.exceptions import ValidationError, AuthenticationFailed
 # Internal Imports
 from .models import Server, Category, Channel
 from .serializer import ServerSerializer
+from .schema import server_list_docs
 
 
 class ServerListViewSet(viewsets.ViewSet):
+    """
+    A viewset for retrieving a list of servers with optional filtering and pagination.
+
+    Attributes:
+        queryset (QuerySet): A queryset containing all Server objects.
+    """
+
     queryset = Server.objects.all()
 
+    @server_list_docs
     def list(self, request):
+        """
+        Retrieve a list of servers optionally filtered and paginated.
+
+        Args:
+            request (Request): The incoming HTTP request.
+
+        Returns:
+            Response: A JSON response containing the serialized server data.
+        """
         category = request.query_params.get("category")
         category_name = request.query_params.get("category_name")
         by_user = request.query_params.get("by_user") == "True"
