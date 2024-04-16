@@ -3,6 +3,7 @@ from django.db import models
 from django.conf import settings
 from django.shortcuts import get_object_or_404
 from django.dispatch import receiver
+from .validators import validate_icon_image_size, validate_image_file_extension
 
 
 def category_icon_upload_path(instance, filename):
@@ -50,8 +51,15 @@ class Server(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="server_category")
     description = models.CharField(max_length=250, null=True)
     member = models.ManyToManyField(settings.AUTH_USER_MODEL)
-    banner = models.ImageField(upload_to=server_banner_upload_path, blank=True, null=True)
-    icon = models.ImageField(upload_to=server_icon_upload_path, blank=True, null=True)
+    banner = models.ImageField(
+        upload_to=server_banner_upload_path, blank=True, null=True, validators=[validate_image_file_extension]
+    )
+    icon = models.ImageField(
+        upload_to=server_icon_upload_path,
+        blank=True,
+        null=True,
+        validators=[validate_icon_image_size, validate_image_file_extension],
+    )
 
     def save(self, *args, **kwargs):
         if self.id:
